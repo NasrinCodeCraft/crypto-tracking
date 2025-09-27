@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { CryptoContext } from '../context/CryptoContext';
 import { ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom'
 
 const CoinArea = () => {
 
     const [isCurrencyDropdownOpen, setIsCurrencyDropDownOpen] = useState(false)
-    const { fileredCryptos, currentCurrency, setCurrentCurrency, } = useContext(CryptoContext)
+    const { filteredCryptos, currentCurrency, setCurrentCurrency, } = useContext(CryptoContext)
 
     const handleCurrencySelect = (selectedCurrency) => {
         switch (selectedCurrency) {
@@ -85,6 +86,47 @@ const CoinArea = () => {
                     ))}
                 </div>
             )}
+
+            {/* COIN LIST */}
+            <div className='space-y-3 relative z-10'>
+                {filteredCryptos.slice(0, 12).map((item) => (
+                    <Link to={`/crypto/${item.id}`} key={item.id} className='block p-4 bg-gray-800/30 backdrop-blur-md hover:bg-gray-700/40
+                    border border-emerald-500/10 hover:border-cyan-500/30 transition-all duration-300 group'>
+                        {/* MOBILE TABLET LAYOUT */}
+                        <div className='md:hidden space-y-3'>
+                            <div className='flex items-center justify-between'>
+                                <div className='flex items-center gap-3'>
+                                    <span className='text-emerald-400/80 text-sm'>
+                                        #{item.market_cap_rank}
+                                    </span>
+                                    <img src={item.image} alt={item.name} className='w-7 h-7 sm:w-8 sm:h-8 rounded-full
+                                    bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 p-0.5'/>
+                                    <div>
+                                        <p className='font-medium text-gray-100 sm:text-base text-sm'>
+                                            {item.name}
+                                        </p>
+                                        <p className='text-xs sm:text-sm text-cyan-400/80 mt-0.5'>
+                                            {item.symbol.toUpperCase()}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className='text-right'>
+                                    <p className='text-sm sm:text-base text-gray-100'>
+                                        {currentCurrency.symbol}{item.current_price.toLocaleString()}
+                                    </p>
+                                    <p className='text-xs sm:text-sm text-emerald-400/60 mt-0.5'>
+                                        Vol: {currentCurrency.symbol}{item.total_volume.toLocaleString()}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* DESKTOP VIEW */}
+
+                    </Link>
+                ))}
+            </div>
         </div>
     );
 };
