@@ -8,7 +8,7 @@ const CryptoContextProvider = (props) => {
     const [searchTerm, setSearchTerm] = useState("")
     const [currentCurrency, setCurrentCurrency] = useState({
         name: "usd",
-        Symbol: "$",
+        symbol: "$",
     })
 
     // API: CG-T3Xun4SqTsmPP8uWPSN94Khd	
