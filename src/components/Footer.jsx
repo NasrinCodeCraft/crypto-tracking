@@ -16,7 +16,8 @@ const Footer = () => {
                     Made with <span className='text-red-400/80'>&hearts;</span>
                     <br />
                     &middot;
-                    <p className='hover:text-purple-400 transition-colors'>Nasrin Mokhtari</p>
+                    <br />
+                    <span className='hover:text-purple-400 transition-colors'>Nasrin Mokhtari</span>
                 </p>
             </div>
         </div>

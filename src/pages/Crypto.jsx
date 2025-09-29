@@ -1,10 +1,15 @@
-import { memo } from 'react';
+import React from 'react';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import CoinPage from '../components/CoinPage';
 
 const Crypto = () => {
   return (
-    <div>
-      <h2>Crypto</h2>
-    </div>
+    <>
+      <Navbar />
+          <CoinPage />
+      <Footer />
+    </>
   );
 };
 

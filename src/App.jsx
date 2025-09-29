@@ -1,6 +1,7 @@
 import React from "react";
 import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
+import Crypto from "./pages/Crypto";
 
 const App = () => {
   return (
