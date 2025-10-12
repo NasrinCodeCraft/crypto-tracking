@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CryptoContext } from '../context/CryptoContext'
+import AreaChart from '../components/AreaChart';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 
 const CoinPage = () => {
 
@@ -37,6 +39,8 @@ const CoinPage = () => {
 
                 console.log('Request options:', requestOptions)
                 if (!chartRes.ok) throw new Error(`Error fetching chart data: ${chartRes.statusText}`)
+                const chartJson = await chartRes.json();
+                setChartData(chartJson);
             }
 
             catch (err) {
@@ -94,13 +98,129 @@ const CoinPage = () => {
                                 <select value={period} onChange={(e) => setPeriod(e.target.value)}
                                     className='bg-gray-800/60 border border-emerald-500/30 rounded-lg px-3
                                     py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500/50'>
-                                        <option value="1">24H</option>
-                                        <option value="7">7D</option>
-                                        <option value="10">10D</option>
-                                        <option value="30">30D</option>
-                                        <option value="90">3M</option>
-                                        <option value="365">1Y</option>
-                                    </select>
+                                    <option value="1">24H</option>
+                                    <option value="7">7D</option>
+                                    <option value="10">10D</option>
+                                    <option value="30">30D</option>
+                                    <option value="90">3M</option>
+                                    <option value="365">1Y</option>
+                                </select>
+                                <div className='absolute -inset-0.5 bg-gradient-to-r from-emerald-600/20 to-cyan-500/20 rounded-lg
+                                blur opacity-30 group-hover:opacity-50 transition duration-300 -z-10' />
+                            </div>
+                        </div>
+
+                        <div className='h-64bmd:h-80'>
+                            <AreaChart historicalData={chartData}
+                                currencysymbol={currentCurrency.symbol} />
+                        </div>
+                    </div>
+
+                    <div className='space-y-3 md:hidden'>
+                        <div className='bg-gray-800/30 backdrop-blur-md p-4 rounded-lg border border-emerald-500/20'>
+                            <div className='flex justify-between items-center'>
+                                <span className='text-sm text-cyan-400/80'>Current Price</span>
+                                <span className='text-lg font-bold text-emerald-400'>
+                                    {currentCurrency.symbol}
+                                    {coinDetails.market_data.current_price[currentCurrency.name].toLocaleString()}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className='bg-gray-800/30 backdrop-blur-md p-4 rounded-lg border border-emerald-500/20'>
+                            <div className='flex justify-between items-center'>
+                                <span className='text-sm text-cyan-400/80'>Market Cap</span>
+                                <span className='text-lg font-bold text-emerald-400'>
+                                    {currentCurrency.symbol}
+                                    {coinDetails.market_data.market_cap[currentCurrency.name].toLocaleString()}
+                                </span>
+                            </div>
+                        </div>
+
+                         <div className='bg-gray-800/30 backdrop-blur-md p-4 rounded-lg border border-emerald-500/20'>
+                            <div className='space-y-3'>
+                                <div className='flex justify-between items-center'>
+                                    <span className='text-sm text-cyan-400/80'>24h High</span>
+                                    <div className='flex items-center text-green-400'>
+                                        <ArrowUp className='w-4 h-4 mr-1'/>
+                                        {currentCurrency.symbol}
+                                        {coinDetails.market_data.high_24h[currentCurrency.name].toLocaleString()}
+                                    </div>
+                                </div>
+                                <div className='flex justify-between items-center'>
+                                    <span className='text-sm text-cyan-400/80'>24h Low</span>
+                                    <div className='flex items-center text-red-400'>
+                                        <ArrowDown className='w-4 h-4 mr-1'/>
+                                        {currentCurrency.symbol}
+                                        {coinDetails.market_data.low_24h[currentCurrency.name].toLocaleString()}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='hidden md:grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6'>
+                        <div className='bg-gray-800/30 backdrop-blur-md p-4 rounded-xl border border-emerald-500/20'>
+                            <h3 className='txet-sm text-cyan-400/80 mb-2'>Current Price</h3>
+                            <p className='txet-2xl font-bold text-emerald-400'>
+                                {currentCurrency.symbol}
+                                    {coinDetails.market_data.current_price[currentCurrency.name].toLocaleString()}
+                            </p>
+                        </div>
+
+                        <div className='bg-gray-800/30 backdrop-blur-md p-4 rounded-xl border border-emerald-500/20'>
+                            <h3 className='txet-sm text-cyan-400/80 mb-2'>Market Cap</h3>
+                            <p className='txet-2xl font-bold text-emerald-400'>
+                                {currentCurrency.symbol}
+                                {coinDetails.market_data.market_cap[currentCurrency.name].toLocaleString()}
+                            </p>
+                        </div>
+
+                        <div className='bg-gray-800/30 backdrop-blur-md p-4 rounded-xl border border-emerald-500/20'>
+                            <h3 className='txet-sm text-cyan-400/80 mb-2'>24 Range</h3>
+                            <div className='flex justify-between items-center'>
+                                <div className='flex items-center text-green-400'>
+                                    <ArrowUp className='w-5 h-5 mr-1'/>
+                                    {currentCurrency.symbol}
+                                    {coinDetails.market_data.high_24h[currentCurrency.name].toLocaleString()}
+                                </div>
+                                <div className='flex items-center text-red-400'>
+                                    <ArrowDown className='w-5 h-5 mr-1'/>
+                                    {currentCurrency.symbol}
+                                    {coinDetails.market_data.low_24h[currentCurrency.name].toLocaleString()}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='bg-gray-800/30 backdrop-blur-md p-4 rounded-lg md:rounded-xl border border-emerald-500/20'>
+                            <div className='flex justify-between items-center'>
+                                <span className='text-sm md:text-base text-emerald-400/90'>
+                                    24h Change
+                                </span>
+                                <div className='flex items-center gap-2'>
+                                    <span className={`text-base md:text-lg ${coinDetails.market_data.price_change_percentage_24h > 0
+                                        ? 'text-green-400' : 'text-red-400'}`}>
+                                            {coinDetails.market_data.price_change_percentage_24h.toFixed(2)}%
+                                        </span>
+
+                                        {coinDetails.market_data.price_change_percentage_24h > 0 ? (
+                                            <ArrowUp className='w-5 h-5 mr-1'/>
+                                        ): (
+                                            <ArrowDown className='w-5 h-5 mr-1'/>
+                                        )}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='bg-gray-800/30 backdrop-blur-md p-4 rounded-lg md:rounded-xl border border-emerald-500/20'>
+                            <div className='flex justify-between items-center'>
+                                <span className='text-sm md:text-base text-emerald-400/90'>
+                                    24h Volume
+                                </span> 
+                                <span className='text-lg md:text-xl text-cyan-400'>
+                                        {currentCurrency.symbol}
+                                        {coinDetails.market_data.total_volume[currentCurrency.name].toLocaleString()}
+                                </span>                           
                             </div>
                         </div>
                     </div>
